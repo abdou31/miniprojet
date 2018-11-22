@@ -40,8 +40,10 @@ app.use('/api/greeting', (request, response) => {
     return response.send('Not online');
   }
 
-  const name = request.query ? request.query.name : undefined;
-  return response.send({content: `Hello, ${name || 'World!'}`});
+//const name = request.query ? request.query.name : undefined;
+  const age = request.query ? request.query.name : undefined;
+  return response.send({content: `Your age is, ${age || 'World!'}`});
+ // return response.send({content: `Hello, ${name || 'World!'}`});
 });
 
 app.use('/api/stop', (request, response) => {

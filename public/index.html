@@ -38,27 +38,21 @@
                 <p>Welcome to our project , created by <em>Abdechafi</em> , <em>Ibtissem</em>, <em>Ahlem</em> and <em>Mayssa</em></p>
             </div>
             <div class="paragraph">
-                <p>To demonstrate this behavior, the application configures a <code>/health</code> HTTP endpoint, which is used
-                    by Kubernetes to issue HTTP requests. If the container is still alive—​which means the Health HTTP endpoint
-                    is able to reply—​the management platform will receive HTTP code 200 as a response, and no further action
-                    is taken. After you click the
-                    <code>Stop Service</code> button, the HTTP endpoint stops returning a response, and the platform then restarts
-                    the pod with the unresponsive container. While the pod is down, the booster UI polls the service periodically
-                    until the pod is restarted. In the meantime, do <strong>not</strong> refresh the page because it will
-                    not be served until the pod finishes restarting.</p>
+                <p>This project is created to show how openshift redhat worked using PaaS.</p>
             </div>
             <div class="sect2">
-                <h3 id="_using_the_greeting_service">Using the greeting service</h3>
+                <h3 id="_using_the_greeting_service">Calcul your age</h3>
             </div>
         </div>
     </div>
 
     <form class="form-inline">
       <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="World">
+        <label for="name">Your birthdate</label>
+        <input type="date" class="form-control" id="name" placeholder="World">
       </div>
-      <button id="invoke" type="submit" class="btn btn-success">Invoke</button>
+     <!-- <button id="invoke" type="submit" class="btn btn-success">Calcul</button>!-->
+     <button id="calcul" type="submit" class="btn btn-success">Calcul</button>
       <button id="stop" type="submit" class="btn btn-danger">Stop Service</button>
     </form>
 
@@ -76,12 +70,46 @@
     var stopTime;
     var attempts;
 
-    function invokeService() {
+  /*  function invokeService() {
         var n = $("#name").val() || "World";
         $.getJSON("/api/greeting?name=" + n, function (res) {
             $("#greeting-result").html(JSON.stringify(res));
-        });
+        });*/
+    function calcul(){
+        var mdate = $("#name").val().toString();
+        var yearThen = parseInt(mdate.substring(0,4), 10);
+        var monthThen = parseInt(mdate.substring(5,7), 10);
+        var dayThen = parseInt(mdate.substring(8,10), 10);
+        
+        var today = new Date();
+        var birthday = new Date(yearThen, monthThen-1, dayThen);
+        
+        var differenceInMilisecond = today.valueOf() - birthday.valueOf();
+        
+        var year_age = Math.floor(differenceInMilisecond / 31536000000);
+        var day_age = Math.floor((differenceInMilisecond % 31536000000) / 86400000);
+        
+        if ((today.getMonth() == birthday.getMonth()) && (today.getDate() == birthday.getDate())) {
+            alert("Happy B'day!!!");
+        }
+        
+        var month_age = Math.floor(day_age/30);
+        
+        day_age = day_age % 30;
+        
+        if (isNaN(year_age) || isNaN(month_age) || isNaN(day_age)) {
+           // $("#exact_age").text("Invalid birthday - Please try again!");
+           alert("Invalide input");
+        }
+        else {
+//$("#exact_age").html("You are<br/><span id=\"age\">" + year_age + " years " + month_age + " months " + day_age + " days</span> old");
+//var n = $("#name").val() || "World";
+    $.getJSON("/api/greeting?name=" +year_age+ "  year  ,"+month_age+"  month and  "+day_age+"  days  ", function (res) {
+    $("#greeting-result").html(JSON.stringify(res)); 
+    });
+}
     }
+    
 
     function invokeServiceandRetryUponFailures() {
         var n = $("#name").val() || "World";
@@ -98,8 +126,9 @@
     }
 
     $(document).ready(function() {
-        $("#invoke").click(function (e) {
-            invokeService();
+        $("#calcul").click(function (e) {
+           // invokeService();
+            calcul();
             e.preventDefault();
         });
 
